@@ -76,7 +76,7 @@ const Sidebar = () => {
                 <NavLink
                   to={to}
                   className={({ isActive }) =>
-                    `flex items-center p-2 text-black rounded-lg hover:bg-gray-200 group ${isActive ? 'bg-gray-200' : ''}`
+                    `flex items-center p-2 text-black rounded-lg hover:bg-gray-200 group ${isActive ? 'bg-gray-200 text-primary' : ''}`
                   }
                   tabIndex={isOpen ? 0 : -1}
                   aria-current="page"
