@@ -1,3 +1,5 @@
+import ErrorBoundary from '../ErrorBoundary'
+
 import { Sidebar } from './Sidebar'
 
 type Props = {
@@ -8,7 +10,9 @@ const Layout = ({ children }: Props) => {
   return (
     <>
       <Sidebar />
-      <main className="p-4 sm:ml-64">{children}</main>
+      <main className="p-4 sm:ml-64">
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </main>
     </>
   )
 }
