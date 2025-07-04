@@ -1,14 +1,46 @@
-import { ChartPie, Menu } from 'lucide-react'
+import { ChartPie, Menu, Table, History, LogOut } from 'lucide-react'
 import { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router'
 
+import { auth } from '@/auth'
+import { paths } from '@/paths'
 import { cn } from '@/utils/cn'
 
+import Button from '../Button'
+
 const Sidebar = () => {
+  const navigate = useNavigate()
+  const { logout } = auth()
+
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleSidebar = () => {
     setIsOpen((prev) => !prev)
   }
+
+  const handleLogout = () => {
+    logout()
+
+    navigate(paths.login)
+  }
+
+  const items = [
+    {
+      name: 'Balance',
+      icon: ChartPie,
+      to: paths.balance,
+    },
+    {
+      name: 'Positions',
+      icon: Table,
+      to: paths.positions,
+    },
+    {
+      name: 'History',
+      icon: History,
+      to: paths.history,
+    },
+  ]
 
   return (
     <>
@@ -36,22 +68,30 @@ const Sidebar = () => {
         tabIndex={-1}
         role="complementary"
         aria-modal="true"
-        aria-hidden={!isOpen && 'true'}
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 flex flex-col justify-between">
           <ul className="space-y-2 font-medium">
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                tabIndex={isOpen ? 0 : -1}
-                aria-current="page"
-              >
-                <ChartPie aria-hidden="true" focusable="false" />
-                <span className="ms-3">Balance</span>
-              </a>
-            </li>
+            {items.map(({ name, icon: Icon, to }) => (
+              <li key={name}>
+                <NavLink
+                  to={to}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 text-black rounded-lg hover:bg-gray-200 group ${isActive ? 'bg-gray-200' : ''}`
+                  }
+                  tabIndex={isOpen ? 0 : -1}
+                  aria-current="page"
+                >
+                  <Icon aria-hidden="true" focusable="false" />
+                  <span className="ms-3">{name}</span>
+                </NavLink>
+              </li>
+            ))}
           </ul>
+
+          <Button className="gap-2" onClick={handleLogout}>
+            <LogOut aria-hidden="true" focusable="false" />
+            Logout
+          </Button>
         </div>
       </aside>
 
@@ -62,9 +102,6 @@ const Sidebar = () => {
           tabIndex={0}
           className="bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-30 sm:hidden"
           onClick={toggleSidebar}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') toggleSidebar()
-          }}
         />
       )}
     </>

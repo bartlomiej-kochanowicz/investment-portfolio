@@ -1,5 +1,3 @@
-import { redirect } from 'react-router'
-
 import {
   setSessionItem,
   clearSession,
@@ -23,16 +21,10 @@ const auth = () => {
     setSessionItem(AUTH_KEY, { email })
   }
 
-  const logout = () => {
-    clearSession()
-
-    redirect('/login')
-  }
-
   return {
     getSession,
     login,
-    logout,
+    logout: clearSession,
   }
 }
 
