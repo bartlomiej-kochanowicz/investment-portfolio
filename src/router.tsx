@@ -1,23 +1,27 @@
 import { lazy } from 'react'
 import { createBrowserRouter } from 'react-router'
 
+import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { paths } from './paths'
 
 const Login = lazy(async () => import('./pages/login'))
 const Notfound = lazy(async () => import('./pages/not-found'))
-const Dashboard = lazy(async () => import('./pages/dashboard'))
+const Balance = lazy(async () => import('./pages/balance'))
 
 const router = createBrowserRouter([
   {
-    path: '/dashboard',
+    path: paths.balance,
     element: (
       <ProtectedRoute>
-        <Dashboard />
+        <Layout>
+          <Balance />
+        </Layout>
       </ProtectedRoute>
     ),
   },
   {
-    path: '/',
+    path: paths.login,
     element: <Login />,
   },
   {

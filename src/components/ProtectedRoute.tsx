@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router'
 
 import { auth } from '@/auth'
+import { paths } from '@/paths'
 
 type Props = {
   children: React.ReactNode
@@ -11,10 +12,8 @@ const ProtectedRoute = ({ children }: Props) => {
 
   const session = getSession()
 
-  console.log('@@', session)
-
   if (!session) {
-    return <Navigate to="/" />
+    return <Navigate to={paths.login} />
   }
 
   return <>{children}</>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import { auth } from '@/auth'
 import Button from '@/components/Button'
 import Input from '@/components/Input'
+import { paths } from '@/paths'
 
 const Login = () => {
   const { login } = auth()
@@ -15,7 +16,7 @@ const Login = () => {
     const email = formData.get('email') as string
 
     login(email)
-    navigate('/dashboard')
+    navigate(paths.balance)
   }
 
   return (
