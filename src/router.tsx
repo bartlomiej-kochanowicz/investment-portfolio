@@ -1,25 +1,16 @@
 import { createBrowserRouter } from 'react-router'
 
-import Layout from './components/Layout/Layout'
-import Index from './pages/Index'
-import Notfound from './pages/Notfound'
+import Login from './pages/login'
+import Notfound from './pages/not-found'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <Layout>
-        <Index />
-      </Layout>
-    ),
+    element: <Login />,
   },
   {
     path: '*',
-    element: (
-      <Layout>
-        <Notfound />
-      </Layout>
-    ),
+    element: <Notfound />,
   },
 ])
 

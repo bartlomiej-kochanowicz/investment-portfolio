@@ -31,29 +31,13 @@ class ErrorBoundary extends Component<Props, State> {
 
 export default ErrorBoundary
 
-const LayoutStyle: React.CSSProperties = {
-  alignItems: 'center',
-  display: 'flex',
-  justifyContent: 'center',
-  minHeight: '100vh',
-  minWidth: '100%',
-}
-
-const MessageStyle: React.CSSProperties = {
-  border: '2px #78909c solid',
-  borderRadius: '5px',
-  color: '#78909c',
-  fontSize: '24px',
-  padding: '40px',
-}
-
 export const ErrorBoundaryFallbackComponent: React.FC<
   React.PropsWithChildren<unknown>
 > = () => (
-  <main style={LayoutStyle}>
-    <section style={MessageStyle}>
+  <main>
+    <section>
       Something Error Ooccurring
-      <span style={{ paddingLeft: 3 }} role="img" aria-label="face-emoji">
+      <span role="img" aria-label="face-emoji">
         😞
       </span>
     </section>
