@@ -3,6 +3,9 @@ import { LoaderCircle } from 'lucide-react'
 import { ToggleButtons } from '@/components/ToggleButtons'
 import { HistoryType, useGetHistory } from '@/hooks/useGetHistory'
 
+import { PerformanceChart } from './components/PerformanceChart'
+import { TotalValueChart } from './components/TotalValueChart'
+
 const History = () => {
   const to = new Date()
   const from = new Date(to)
@@ -13,8 +16,6 @@ const History = () => {
       from,
       to,
     })
-
-  console.log('History data:', data)
 
   return (
     <div className="flex flex-col gap-4">
@@ -38,7 +39,16 @@ const History = () => {
         </p>
       )}
 
-      {!isLoading && !hasError && <div>ok</div>}
+      {!isLoading && !hasError && (
+        <>
+          {historyType === HistoryType.TotalValue ? (
+            <TotalValueChart data={data} />
+          ) : null}
+          {historyType === HistoryType.Performance ? (
+            <PerformanceChart data={data} />
+          ) : null}
+        </>
+      )}
     </div>
   )
 }
