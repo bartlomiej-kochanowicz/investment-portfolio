@@ -1,14 +1,12 @@
 import { LoaderCircle } from 'lucide-react'
-import { useState } from 'react'
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 
-import { ToggleChartView } from './components/ToggleChartView'
-import { ChartView, useGetBalance } from './hooks/useGetBalance'
+import { ToggleSummaryType } from '@/components/ToggleSummaryType'
+import { useGetSummaryByType } from '@/hooks/useGetSummaryByType'
 
 const Balance = () => {
-  const [chartView, setChartView] = useState<ChartView>(ChartView.ByAsset)
-
-  const { data, isLoading, hasError } = useGetBalance(chartView)
+  const { data, isLoading, hasError, summaryType, setSummaryType } =
+    useGetSummaryByType()
 
   const COLORS = [
     '#4F8A8B',
@@ -24,7 +22,10 @@ const Balance = () => {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Balance</h1>
-      <ToggleChartView chartView={chartView} setChartView={setChartView} />
+      <ToggleSummaryType
+        summaryType={summaryType}
+        setSummaryType={setSummaryType}
+      />
 
       {isLoading && (
         // 207px = (450px (chart height) - 36px (spinner height)) / 2

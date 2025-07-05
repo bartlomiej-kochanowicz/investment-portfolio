@@ -1,34 +1,33 @@
 import type { Dispatch, SetStateAction } from 'react'
 
 import Button from '@/components/Button'
-
-import { ChartView } from '../hooks/useGetBalance'
+import { SummaryType } from '@/hooks/useGetSummaryByType'
 
 type Props = {
-  chartView: ChartView
-  setChartView: Dispatch<SetStateAction<ChartView>>
+  summaryType: SummaryType
+  setSummaryType: Dispatch<SetStateAction<SummaryType>>
 }
 
-const ToggleChartView = ({ chartView, setChartView }: Props) => {
+const ToggleSummaryType = ({ summaryType, setSummaryType }: Props) => {
   const handleByAssetClick = () => {
-    setChartView(ChartView.ByAsset)
+    setSummaryType(SummaryType.ByAsset)
   }
 
   const handleByClassClick = () => {
-    setChartView(ChartView.ByClass)
+    setSummaryType(SummaryType.ByClass)
   }
 
   return (
     <div className="space-x-2">
       <Button
         onClick={handleByAssetClick}
-        disabled={chartView === ChartView.ByAsset}
+        disabled={summaryType === SummaryType.ByAsset}
       >
         By Asset
       </Button>
       <Button
         onClick={handleByClassClick}
-        disabled={chartView === ChartView.ByClass}
+        disabled={summaryType === SummaryType.ByClass}
       >
         By Class
       </Button>
@@ -36,4 +35,4 @@ const ToggleChartView = ({ chartView, setChartView }: Props) => {
   )
 }
 
-export { ToggleChartView }
+export { ToggleSummaryType }

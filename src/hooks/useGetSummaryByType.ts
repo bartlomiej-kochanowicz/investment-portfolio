@@ -1,8 +1,10 @@
+import { useState } from 'react'
+
 import { useGetAssets } from '@/api/useGetAssets'
 import { useGetPortfolios } from '@/api/useGetPortfolios'
 import { useGetPrices } from '@/api/useGetPrices'
 
-enum ChartView {
+enum SummaryType {
   ByAsset = 'by-asset',
   ByClass = 'by-class',
 }
@@ -12,7 +14,11 @@ type ChartData = {
   value: number
 }[]
 
-const useGetBalance = (chartView: ChartView) => {
+const useGetSummaryByType = () => {
+  const [summaryType, setSummaryType] = useState<SummaryType>(
+    SummaryType.ByAsset,
+  )
+
   const {
     data: assets,
     isLoading: assetsIsLoading,
@@ -46,7 +52,7 @@ const useGetBalance = (chartView: ChartView) => {
       }
     })
 
-    if (chartView === ChartView.ByAsset) {
+    if (summaryType === SummaryType.ByAsset) {
       const assetMap: Record<string, number> = {}
 
       positionsWithAssets.forEach((position) => {
@@ -72,7 +78,7 @@ const useGetBalance = (chartView: ChartView) => {
       }))
     }
 
-    if (chartView === ChartView.ByClass) {
+    if (summaryType === SummaryType.ByClass) {
       const classMap: Record<string, number> = {}
 
       positionsWithAssets.forEach((position) => {
@@ -98,7 +104,9 @@ const useGetBalance = (chartView: ChartView) => {
     isLoading,
     hasError,
     data,
+    summaryType,
+    setSummaryType,
   }
 }
 
-export { useGetBalance, ChartView }
+export { useGetSummaryByType, SummaryType }

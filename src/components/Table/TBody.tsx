@@ -1,7 +1,5 @@
-type Props = React.HTMLAttributes<HTMLTableSectionElement> & {
-  children: React.ReactNode
-}
+type Props = React.HTMLAttributes<HTMLTableSectionElement>
 
-const TBody = ({ children, ...rest }: Props) => <tbody {...rest} />
+const TBody = (props: Props) => <tbody {...props} />
 
 export { TBody }

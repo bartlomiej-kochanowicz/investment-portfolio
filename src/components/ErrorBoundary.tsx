@@ -34,8 +34,8 @@ export default ErrorBoundary
 export const ErrorBoundaryFallbackComponent: React.FC<
   React.PropsWithChildren<unknown>
 > = () => (
-  <section>
-    Something Error Ooccurring
+  <section className="text-center">
+    An error has occurred. Please try again later.
     <span role="img" aria-label="face-emoji">
       😞
     </span>
