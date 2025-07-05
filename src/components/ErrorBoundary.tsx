@@ -34,12 +34,10 @@ export default ErrorBoundary
 export const ErrorBoundaryFallbackComponent: React.FC<
   React.PropsWithChildren<unknown>
 > = () => (
-  <main>
-    <section>
-      Something Error Ooccurring
-      <span role="img" aria-label="face-emoji">
-        😞
-      </span>
-    </section>
-  </main>
+  <section>
+    Something Error Ooccurring
+    <span role="img" aria-label="face-emoji">
+      😞
+    </span>
+  </section>
 )

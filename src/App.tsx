@@ -9,7 +9,6 @@ const App: React.FC = () => (
   <ErrorBoundary>
     <SWRConfig
       value={{
-        refreshInterval: 3000,
         fetcher: async (url: string) =>
           fetch(url).then(async (res) => res.json()),
       }}

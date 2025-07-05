@@ -1,5 +1,7 @@
 import useSWR from 'swr'
 
-const useGetPortfolios = () => useSWR(`/api/portfolios`)
+import type { Portfolio } from '@/@types/portfolio'
+
+const useGetPortfolios = () => useSWR<Portfolio[]>(`/api/portfolios`)
 
 export { useGetPortfolios }

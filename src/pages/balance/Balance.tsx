@@ -1,29 +1,27 @@
-import { useGetAssets } from '@/api/useGetAssets'
-import { useGetPortfolios } from '@/api/useGetPortfolios'
-import { useGetPrices } from '@/api/useGetPrices'
+import { useState } from 'react'
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
+
+import { ToggleChartView } from './components/ToggleChartView'
+import { ChartView, useGetBalance } from './hooks/useGetBalance'
 
 const Balance = () => {
-  const {
-    data: assets,
-    isLoading: assetsIsLoading,
-    error: assetsError,
-  } = useGetAssets()
-  const {
-    data: prices,
-    isLoading: pricesIsLoading,
-    error: pricesError,
-  } = useGetPrices()
-  const {
-    data: portfolios,
-    isLoading: portfoliosIsLoading,
-    error: portfoliosError,
-  } = useGetPortfolios()
+  const [chartView, setChartView] = useState<ChartView>(ChartView.ByAsset)
 
-  const isLoading = assetsIsLoading || pricesIsLoading || portfoliosIsLoading
-  const hasError = (assetsError || pricesError || portfoliosError) && !isLoading
+  const { data, isLoading, hasError } = useGetBalance(chartView)
+
+  const COLORS = [
+    '#4F8A8B', // teal
+    '#FBD46D', // soft yellow
+    '#F76B8A', // soft red
+    '#A8D8EA', // light blue
+    '#374785', // deep blue
+    '#24305E', // navy
+    '#70A1D7', // muted blue
+    '#B8B5FF', // lavender
+  ]
 
   return (
-    <div>
+    <>
       {isLoading && <p>Loading...</p>}
 
       {hasError && (
@@ -31,12 +29,31 @@ const Balance = () => {
       )}
 
       {!isLoading && !hasError && (
-        <pre>
-          <code>{JSON.stringify({ assets, prices, portfolios }, null, 2)}</code>
-        </pre>
+        <div>
+          <ToggleChartView chartView={chartView} setChartView={setChartView} />
+          <ResponsiveContainer width="100%" height={450}>
+            <PieChart width={400} height={400}>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius={40}
+                outerRadius={120}
+                dataKey="value"
+                label={(entry) => `${entry.name}: ${entry.value} $`}
+              >
+                {data.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       )}
-      <h1>Balance</h1>
-    </div>
+    </>
   )
 }
 
