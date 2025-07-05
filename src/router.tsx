@@ -9,6 +9,7 @@ const Login = lazy(async () => import('./pages/login'))
 const Notfound = lazy(async () => import('./pages/not-found'))
 const Balance = lazy(async () => import('./pages/balance'))
 const Positions = lazy(async () => import('./pages/positions'))
+const History = lazy(async () => import('./pages/history'))
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,16 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <Layout>
           <Positions />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: paths.history,
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <History />
         </Layout>
       </ProtectedRoute>
     ),
