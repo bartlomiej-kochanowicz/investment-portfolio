@@ -1,8 +1,8 @@
 import { LoaderCircle } from 'lucide-react'
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 
-import { ToggleSummaryType } from '@/components/ToggleSummaryType'
-import { useGetSummaryByType } from '@/hooks/useGetSummaryByType'
+import { ToggleButtons } from '@/components/ToggleButtons'
+import { SummaryType, useGetSummaryByType } from '@/hooks/useGetSummaryByType'
 
 const Balance = () => {
   const { data, isLoading, hasError, summaryType, setSummaryType } =
@@ -22,9 +22,13 @@ const Balance = () => {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Balance</h1>
-      <ToggleSummaryType
-        summaryType={summaryType}
-        setSummaryType={setSummaryType}
+      <ToggleButtons
+        options={[
+          { label: 'By Asset', value: SummaryType.ByAsset },
+          { label: 'By Class', value: SummaryType.ByClass },
+        ]}
+        value={summaryType}
+        setValue={setSummaryType}
       />
 
       {isLoading && (

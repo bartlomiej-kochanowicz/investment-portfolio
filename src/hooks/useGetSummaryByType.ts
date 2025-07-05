@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import type { ChartData } from '@/@types/chart-data'
 import { useGetAssets } from '@/api/useGetAssets'
 import { useGetPortfolios } from '@/api/useGetPortfolios'
 import { useGetPrices } from '@/api/useGetPrices'
@@ -8,11 +9,6 @@ enum SummaryType {
   ByAsset = 'by-asset',
   ByClass = 'by-class',
 }
-
-type ChartData = {
-  name: string
-  value: number
-}[]
 
 const useGetSummaryByType = () => {
   const [summaryType, setSummaryType] = useState<SummaryType>(

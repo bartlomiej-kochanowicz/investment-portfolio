@@ -1,7 +1,7 @@
 import { LoaderCircle } from 'lucide-react'
 
 import { Table, TBody, TD, TH, THead, TR } from '@/components/Table'
-import { ToggleSummaryType } from '@/components/ToggleSummaryType'
+import { ToggleButtons } from '@/components/ToggleButtons'
 import { SummaryType, useGetSummaryByType } from '@/hooks/useGetSummaryByType'
 
 const Positions = () => {
@@ -22,9 +22,13 @@ const Positions = () => {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Positions</h1>
-      <ToggleSummaryType
-        summaryType={summaryType}
-        setSummaryType={setSummaryType}
+      <ToggleButtons
+        options={[
+          { label: 'By Asset', value: SummaryType.ByAsset },
+          { label: 'By Class', value: SummaryType.ByClass },
+        ]}
+        value={summaryType}
+        setValue={setSummaryType}
       />
 
       {isLoading && (
