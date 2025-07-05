@@ -1,0 +1,6 @@
+export { Table } from './Table'
+export { TBody } from './TBody'
+export { TD } from './TD'
+export { TH } from './TH'
+export { THead } from './THead'
+export { TR } from './TR'
