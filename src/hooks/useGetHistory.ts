@@ -1,9 +1,62 @@
 import type { ChartData } from '@/@types/chart-data'
+import type { Portfolio } from '@/@types/portfolio'
 import { useGetAssets } from '@/api/useGetAssets'
-import { useGetPortfolios } from '@/api/useGetPortfolios'
+import { useGetPortfoliosByDate } from '@/api/useGetPortfoliosByDate'
 import { useGetPrices } from '@/api/useGetPrices'
+import { createDateTable } from '@/utils/create-date-table'
 
-const useGetHistory = () => {
+type Props = { from: Date; to: Date }
+
+const calculateValueByDate = (
+  portfoliosByDate: {
+    date: string
+    portfolios: Portfolio[]
+  }[],
+) =>
+  portfoliosByDate.map(({ date, portfolios }) => {
+    const positions = portfolios.map((portfolio) => portfolio.positions).flat()
+
+    const value = positions.reduce((acc, position) => {
+      return acc + position.quantity * position.price
+    }, 0)
+
+    return {
+      name: date,
+      value: Math.round(value * 100) / 100, // Round to avoid floating point issues
+    }
+  })
+
+const calculatePerformanceByDate = (data: ChartData): ChartData => {
+  if (data.length === 0) {
+    return []
+  }
+  if (data.length === 1) {
+    return [{ name: data[0].name, value: 0 }]
+  }
+
+  const dailyReturns: ChartData = []
+
+  dailyReturns.push({ name: data[0].name, value: 0 })
+
+  for (let i = 1; i < data.length; i++) {
+    const todayValue = data[i].value
+    const yesterdayValue = data[i - 1].value
+
+    const dailyReturn =
+      yesterdayValue !== 0
+        ? ((todayValue - yesterdayValue) / yesterdayValue) * 100
+        : 0
+
+    dailyReturns.push({
+      name: data[i].name,
+      value: Math.round(dailyReturn * 100) / 100, // Round to avoid floating point issues
+    })
+  }
+
+  return dailyReturns
+}
+
+const useGetHistory = ({ from, to }: Props) => {
   const {
     data: assets,
     isLoading: assetsIsLoading,
@@ -14,30 +67,29 @@ const useGetHistory = () => {
     isLoading: pricesIsLoading,
     error: pricesError,
   } = useGetPrices()
+
   const {
-    data: portfolios,
-    isLoading: portfoliosIsLoading,
-    error: portfoliosError,
-  } = useGetPortfolios()
+    data: portfoliosByDate,
+    isLoading: portfoliosByDateIsLoading,
+    error: portfoliosByDateError,
+  } = useGetPortfoliosByDate(createDateTable(from, to))
 
-  const isLoading = assetsIsLoading || pricesIsLoading || portfoliosIsLoading
-  const hasError = (assetsError || pricesError || portfoliosError) && !isLoading
-  const hasData = !isLoading && !hasError && assets && prices && portfolios
+  const isLoading =
+    assetsIsLoading || pricesIsLoading || portfoliosByDateIsLoading
+  const hasError =
+    assetsError || pricesError || (portfoliosByDateError && !isLoading)
+  const hasData =
+    !isLoading && !hasError && assets && prices && portfoliosByDate
 
-  const data: ChartData = []
+  let data: ChartData = []
 
   if (hasData) {
-    const positions = portfolios.map((portfolio) => portfolio.positions).flat()
+    data = calculateValueByDate(portfoliosByDate)
 
-    const positionsWithAssets = positions.map((position) => {
-      const asset = assets.find((asset) => asset.id === position.asset)
-      return {
-        ...position,
-        asset: asset ? asset : null,
-      }
-    })
-
-    console.log('positionsWithAssets', positionsWithAssets)
+    console.log(
+      'Performance data:',
+      calculatePerformanceByDate(calculateValueByDate(portfoliosByDate)),
+    )
   }
 
   return {

@@ -3,7 +3,16 @@ import { LoaderCircle } from 'lucide-react'
 import { useGetHistory } from '@/hooks/useGetHistory'
 
 const History = () => {
-  const { isLoading, hasError } = useGetHistory()
+  const to = new Date()
+  const from = new Date(to)
+  from.setDate(from.getDate() - 14)
+
+  const { isLoading, hasError, data } = useGetHistory({
+    from,
+    to,
+  })
+
+  console.log('History data:', data)
 
   return (
     <div className="flex flex-col gap-4">
@@ -18,6 +27,8 @@ const History = () => {
           Something went wrong while loading data. Please try again later.
         </p>
       )}
+
+      {!isLoading && !hasError && <div>ok</div>}
     </div>
   )
 }

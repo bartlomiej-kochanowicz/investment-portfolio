@@ -248,75 +248,80 @@ export const handlers = [
 
     return HttpResponse.json(response)
   }),
-  http.get(
-    'http://localhost:3000/api/portfolios',
-    async (/* { request } */) => {
-      // const url = new URL(request.url)
-      // const asOf = url.searchParams.getAll('asOf')
+  http.get('http://localhost:3000/api/portfolios', async ({ request }) => {
+    const url = new URL(request.url)
+    const asOfFromRequest = url.searchParams.getAll('asOf')
 
-      const randomInt64 = () =>
-        Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
+    const asOf = asOfFromRequest[0]
+      ? new Date(asOfFromRequest[0]).toISOString()
+      : new Date().toISOString()
 
-      const data: Portfolio[] = [
-        {
-          id: '63b4fe67-fdc6-4422-a29c-03caced8d70a',
-          asOf: new Date().toISOString(),
-          positions: [
-            {
-              id: randomInt64(),
-              asset: 'c1a1e1b0-1a2b-4c3d-8e9f-1a2b3c4d5e6f',
-              quantity: 10,
-              asOf: new Date().toISOString(),
-              price: 150.25,
-            },
-            {
-              id: randomInt64(),
-              asset: 'c1a1e1b0-1a2b-4c3d-8e9f-1a2b3c4d5e6f',
-              quantity: 14,
-              asOf: new Date().toISOString(),
-              price: 40.31,
-            },
-            {
-              id: randomInt64(),
-              asset: 'd8b8l8i7-8b9c-1d0e-5f6a-8b9c0d1e2f3a',
-              quantity: 3,
-              asOf: new Date().toISOString(),
-              price: 90.75,
-            },
-          ],
-        },
-        {
-          id: 'e4140ae6-cddf-4924-b063-fe1dd85466c0',
-          asOf: new Date().toISOString(),
-          positions: [
-            {
-              id: randomInt64(),
-              asset: 'c7a7k7h6-7a8b-0c9d-4e5f-7a8b9c0d1e2f',
-              quantity: 20,
-              asOf: new Date().toISOString(),
-              price: 20.78,
-            },
-            {
-              id: randomInt64(),
-              asset: 'b2f2p2m1-2f3a-5b4c-9d0e-2f3a4b5c6d7e',
-              quantity: 6,
-              asOf: new Date().toISOString(),
-              price: 22.22,
-            },
-            {
-              id: randomInt64(),
-              asset: 'a5e5i5f4-5e6f-8a7b-2c3d-5e6f7a8b9c0d',
-              quantity: 30,
-              asOf: new Date().toISOString(),
-              price: 45.46,
-            },
-          ],
-        },
-      ]
+    const randomInt64 = () =>
+      Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
 
-      await sleep(2000)
+    // Generates a random price between min and max (inclusive, 2 decimals)
+    const randomPrice = (min: number, max: number): number =>
+      Math.round((Math.random() * (max - min) + min) * 100) / 100
 
-      return HttpResponse.json(data)
-    },
-  ),
+    const data: Portfolio[] = [
+      {
+        id: '63b4fe67-fdc6-4422-a29c-03caced8d70a',
+        asOf: new Date(asOf).toISOString(),
+        positions: [
+          {
+            id: randomInt64(),
+            asset: 'c1a1e1b0-1a2b-4c3d-8e9f-1a2b3c4d5e6f',
+            quantity: 10,
+            asOf: new Date(asOf).toISOString(),
+            price: randomPrice(140, 160),
+          },
+          {
+            id: randomInt64(),
+            asset: 'c1a1e1b0-1a2b-4c3d-8e9f-1a2b3c4d5e6f',
+            quantity: 14,
+            asOf: new Date(asOf).toISOString(),
+            price: randomPrice(30, 50),
+          },
+          {
+            id: randomInt64(),
+            asset: 'd8b8l8i7-8b9c-1d0e-5f6a-8b9c0d1e2f3a',
+            quantity: 3,
+            asOf: new Date(asOf).toISOString(),
+            price: randomPrice(80, 100),
+          },
+        ],
+      },
+      {
+        id: 'e4140ae6-cddf-4924-b063-fe1dd85466c0',
+        asOf: new Date(asOf).toISOString(),
+        positions: [
+          {
+            id: randomInt64(),
+            asset: 'c7a7k7h6-7a8b-0c9d-4e5f-7a8b9c0d1e2f',
+            quantity: 20,
+            asOf: new Date(asOf).toISOString(),
+            price: randomPrice(10, 30),
+          },
+          {
+            id: randomInt64(),
+            asset: 'b2f2p2m1-2f3a-5b4c-9d0e-2f3a4b5c6d7e',
+            quantity: 6,
+            asOf: new Date(asOf).toISOString(),
+            price: randomPrice(20, 25),
+          },
+          {
+            id: randomInt64(),
+            asset: 'a5e5i5f4-5e6f-8a7b-2c3d-5e6f7a8b9c0d',
+            quantity: 30,
+            asOf: new Date(asOf).toISOString(),
+            price: randomPrice(40, 50),
+          },
+        ],
+      },
+    ]
+
+    await sleep(2000)
+
+    return HttpResponse.json(data)
+  }),
 ]

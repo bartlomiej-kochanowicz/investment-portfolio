@@ -3,6 +3,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 
 import { ToggleButtons } from '@/components/ToggleButtons'
 import { SummaryType, useGetSummaryByType } from '@/hooks/useGetSummaryByType'
+import { formatCurrency } from '@/utils/format-currency'
 
 const Balance = () => {
   const { data, isLoading, hasError, summaryType, setSummaryType } =
@@ -53,7 +54,9 @@ const Balance = () => {
               innerRadius={40}
               outerRadius={120}
               dataKey="value"
-              label={(entry) => `${entry.name}: ${entry.value} $`}
+              label={({ name, value }) =>
+                `${name}: ${formatCurrency(value || 0)}`
+              }
             >
               {data.map((entry, index) => (
                 <Cell

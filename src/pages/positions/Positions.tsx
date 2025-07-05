@@ -3,6 +3,7 @@ import { LoaderCircle } from 'lucide-react'
 import { Table, TBody, TD, TH, THead, TR } from '@/components/Table'
 import { ToggleButtons } from '@/components/ToggleButtons'
 import { SummaryType, useGetSummaryByType } from '@/hooks/useGetSummaryByType'
+import { formatCurrency } from '@/utils/format-currency'
 
 const Positions = () => {
   const { data, isLoading, hasError, summaryType, setSummaryType } =
@@ -51,7 +52,7 @@ const Positions = () => {
             {data.map((item) => (
               <TR key={item.name}>
                 <TH scope="row">{item.name}</TH>
-                <TD>{item.value} $</TD>
+                <TD>{formatCurrency(item.value)}</TD>
               </TR>
             ))}
           </TBody>
