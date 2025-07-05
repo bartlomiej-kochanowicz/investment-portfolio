@@ -1,11 +1,11 @@
+import { useState } from 'react'
+
 import type { ChartData } from '@/@types/chart-data'
 import type { Portfolio } from '@/@types/portfolio'
 import { useGetAssets } from '@/api/useGetAssets'
 import { useGetPortfoliosByDate } from '@/api/useGetPortfoliosByDate'
 import { useGetPrices } from '@/api/useGetPrices'
 import { createDateTable } from '@/utils/create-date-table'
-
-type Props = { from: Date; to: Date }
 
 const calculateValueByDate = (
   portfoliosByDate: {
@@ -56,7 +56,18 @@ const calculatePerformanceByDate = (data: ChartData): ChartData => {
   return dailyReturns
 }
 
-const useGetHistory = ({ from, to }: Props) => {
+enum HistoryType {
+  TotalValue = 'total-value',
+  Performance = 'performance',
+}
+
+type UseGetHistoryProps = { from: Date; to: Date }
+
+const useGetHistory = ({ from, to }: UseGetHistoryProps) => {
+  const [historyType, setHistoryType] = useState<HistoryType>(
+    HistoryType.TotalValue,
+  )
+
   const {
     data: assets,
     isLoading: assetsIsLoading,
@@ -86,17 +97,18 @@ const useGetHistory = ({ from, to }: Props) => {
   if (hasData) {
     data = calculateValueByDate(portfoliosByDate)
 
-    console.log(
-      'Performance data:',
-      calculatePerformanceByDate(calculateValueByDate(portfoliosByDate)),
-    )
+    if (historyType === HistoryType.Performance) {
+      data = calculatePerformanceByDate(data)
+    }
   }
 
   return {
     data,
     isLoading,
     hasError,
+    historyType,
+    setHistoryType,
   }
 }
 
-export { useGetHistory }
+export { useGetHistory, HistoryType }
