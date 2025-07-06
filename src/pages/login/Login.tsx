@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+import { useNavigate, Navigate } from 'react-router'
 
 import { auth } from '@/auth'
 import Button from '@/components/Button'
@@ -6,7 +6,7 @@ import Input from '@/components/Input'
 import { paths } from '@/paths'
 
 const Login = () => {
-  const { login } = auth()
+  const { login, getSession } = auth()
   const navigate = useNavigate()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -17,6 +17,12 @@ const Login = () => {
 
     login(email)
     navigate(paths.balance)
+  }
+
+  const session = getSession()
+
+  if (session) {
+    return <Navigate to={paths.balance} replace />
   }
 
   return (
