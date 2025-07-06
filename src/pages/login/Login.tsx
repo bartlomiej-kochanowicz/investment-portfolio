@@ -30,8 +30,8 @@ const Login = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           className="mx-auto h-10 w-auto"
-          src="/images/vega_dark.png"
-          alt="Vega Logo"
+          src="/images/logo_dark.png"
+          alt="Investment Portfolio Logo"
         />
 
         <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
